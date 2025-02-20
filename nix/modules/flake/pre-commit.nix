@@ -18,15 +18,22 @@
     };
 
     fourmolu.settings = {
-      indentation = 2;
+      column-limit = 120;
       comma-style = "leading";
-      record-brace-space = true;
-      indent-wheres = true;
-      import-export-style = "diff-friendly";
-      respectful = true;
-      haddock-style = "multi-line";
-      newlines-between-decls = 1;
       extensions = [ "ImportQualifiedPost" ];
+      function-arrows = "leading";
+      haddock-style = "single-line";
+      haddock-style-module = "single-line";
+      import-export-style = "leading";
+      in-style = "left-align";
+      indent-wheres = false;
+      indentation = 2;
+      let-style = "inline";
+      newlines-between-decls = 1;
+      record-brace-space = true;
+      respectful = true;
+      single-constraint-parens = "always";
+      unicode = "never";
     };
   };
 }
