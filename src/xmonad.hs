@@ -133,13 +133,13 @@ myXmobar = statusBarPropTo "_XMONAD_LOG_1" "xmobar" (pure myXmobarPP)
 
 myXmobarPP :: PP
 myXmobarPP = def
-    { ppSep             = grey0         " | "
+    { ppSep             = grey0         " "
     , ppCurrent         = purple . wrap " " ""
     , ppVisible         = blue   . wrap " " ""
     , ppHidden          = grey0  . wrap " " ""
     , ppHiddenNoWindows = grey0  . wrap " " ""
     , ppUrgent          = red    . wrap " " ""
-    , ppLayout          = aqua   . wrap "" ""
+    , ppLayout          = aqua   . wrap (grey0 " [ ") (grey0 " ] ")
     , ppOrder           = \[ws, l, _] -> [ws, l]
     }
 
