@@ -1,4 +1,3 @@
-import Graphics.X11.ExtraTypes.XF86
 import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Hooks.DynamicLog
@@ -11,6 +10,9 @@ import XMonad.Layout.Renamed
 import XMonad.Layout.Spacing
 import XMonad.StackSet qualified as W
 import XMonad.Util.EZConfig (additionalKeys)
+
+import Graphics.X11.ExtraTypes.XF86
+
 import XMonadConfig.GruvboxMaterial
 
 {- FOURMOLU_DISABLE -}
