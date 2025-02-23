@@ -37,9 +37,9 @@ myConfig = def
 -- | Configuration
 myTerminal           = "wezterm"
 myModMask            = mod4Mask
-myBorderWidth        = 3
-myNormalBorderColor  = background
-myFocusedBorderColor = foreground
+myBorderWidth        = 5
+myNormalBorderColor  = "#282828"
+myFocusedBorderColor = "#282828"
 myWorkspaces         = ["code", "chat", "web", "games", "misc"]
 myLauncher           = "rofi -modi run,calc -show run"
 myScrot              = "scrot -s '%Y%m%d_%H%M%S.png' -e 'mv $f ~/Pictures/scrots/'"
