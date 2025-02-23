@@ -1,3 +1,4 @@
+# List available recipes
 default:
     @just --list
 
@@ -10,6 +11,10 @@ docs:
 repl *ARGS:
     cabal repl {{ ARGS }}
 
-# Run ghcid -- auto-recompile and run `main` function
-run:
-    ghcid -T :main
+# Run cabal build
+build *ARGS:
+    cabal build {{ ARGS }}
+
+# Run cabal run
+run *ARGS:
+    cabal run {{ ARGS }}
