@@ -1,23 +1,13 @@
-cabal-version:      2.4
+cabal-version:      3.0
 name:               xmonad-config
 version:            0.1.0.0
 license:            MIT
-copyright:          2022 Jasmine Marie Wilson
-maintainer:         srid@srid.ca
 author:             Jasmine Marie Wilson
-category:           Web
-homepage:           https://srid.ca/xmonad-config
-
--- TODO: Before hackage release.
--- A short (one-line) description of the package.
-synopsis:           A template for Haskell projects using Nix
-
--- A longer description of the package.
--- description:
-
--- A URL where users can report bugs.
--- bug-reports:
-
+maintainer:         its.jassy@pm.me
+category:           System
+homepage:           https://git.sajenim.dev/xmonad-config
+synopsis:           My personal xmonad + xmobar configuration
+bug-reports:        https://git.sajenim.dev/jasmine/xmonad-config/issues
 extra-source-files:
   LICENSE
   README.md
@@ -63,6 +53,22 @@ common shared
   hs-source-dirs:     src
   default-language:   GHC2021
 
-executable xmonad-config
-  import:  shared
-  main-is: Main.hs
+executable xmobar
+  import:        shared
+  ghc-options:   -threaded
+  build-depends:
+    , xmobar
+    , xmonad-contrib
+
+  other-modules: XMonadConfig.GruvboxMaterial
+  main-is:       xmobar.hs
+
+executable xmonad
+  import:        shared
+  build-depends:
+    , X11
+    , xmonad
+    , xmonad-contrib
+
+  other-modules: XMonadConfig.GruvboxMaterial
+  main-is:       xmonad.hs
