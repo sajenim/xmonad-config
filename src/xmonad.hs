@@ -115,10 +115,10 @@ myKeybindings =
 myLayouts = myTile ||| myBsp ||| myMax ||| myFull
   where
     -- our layouts
-    myTile     = renamed [Replace "tile"] . avoidStruts . myGaps $ Tall nmaster delta ratio
-    myBsp      = renamed [Replace "bsp" ] . avoidStruts . myGaps $ emptyBSP
-    myMax      = renamed [Replace "max" ] . avoidStruts . myGaps $ Full
-    myFull     = renamed [Replace "full"] . noBorders            $ Full
+    myTile     = renamed [Replace "dynamic tiling"        ] . avoidStruts . myGaps $ Tall nmaster delta ratio
+    myBsp      = renamed [Replace "binary space partition"] . avoidStruts . myGaps $ emptyBSP
+    myMax      = renamed [Replace "maximised"             ] . avoidStruts . myGaps $ Full
+    myFull     = renamed [Replace "fullscreen"            ] . noBorders            $ Full
     -- add a configurable amount of space around windows.
     myGaps     = spacingRaw False (Border 10 10 10 10) True (Border 10 10 10 10) True
     -- layout configuration
