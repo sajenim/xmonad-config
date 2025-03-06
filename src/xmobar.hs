@@ -8,8 +8,11 @@ import XMonadConfig.GruvboxMaterial
 config :: Config
 config =
   defaultConfig
-    { font = "Fisa Code 10"
-    , additionalFonts = ["Symbols Nerd Font 2048-em 24"]
+    { font = "Fisa Code Book Italic 10"
+    , additionalFonts =
+        [ "Fisa Code Bold 10"
+        , "Symbols Nerd Font 2048-em 24"
+        ]
     , bgColor = background
     , fgColor = foreground
     , border = BottomB
@@ -30,7 +33,7 @@ config =
     }
  where
   myLogo :: String
-  myLogo = wrap " " " " "<fn=1>\59255</fn>"
+  myLogo = wrap " " " " "<fn=2>\59255</fn>"
 
   -- Commands to run xmobar modules on start
   myCommands :: [Runnable]
@@ -92,10 +95,10 @@ config =
     ppTitle = wrap "" ": " . grey2
 
     inWrapper :: String -> String
-    inWrapper = wrap (grey0 " [ ") (grey0 " ] ")
+    inWrapper = wrap (grey0 " <fn=1>[</fn> ") (grey0 " <fn=1>]</fn> ")
 
     inWrapper' :: String -> String
-    inWrapper' = wrap (grey0 "[ ") (grey0 " ] ")
+    inWrapper' = wrap (grey0 "<fn=1>[</fn> ") (grey0 " <fn=1>]</fn> ")
 
 main :: IO ()
 main = configFromArgs config >>= xmobar

@@ -139,7 +139,7 @@ myXmobarPP = def
     , ppHidden          = grey0  . wrap " " ""
     , ppHiddenNoWindows = grey0  . wrap " " ""
     , ppUrgent          = red    . wrap " " ""
-    , ppLayout          = aqua   . wrap (grey0 " [ ") (grey0 " ] ")
+    , ppLayout          = aqua   . wrap (grey0 " <fn=1>[</fn> ") (grey0 " <fn=1>]</fn> ")
     , ppOrder           = \[ws, l, _] -> [ws, l]
     }
 
