@@ -8,7 +8,7 @@ import XMonadConfig.GruvboxMaterial
 config :: Config
 config =
   defaultConfig
-    { font = "Fira Code Semi Bold 9"
+    { font = "Fisa Code 10"
     , additionalFonts = ["Symbols Nerd Font 2048-em 24"]
     , bgColor = background
     , fgColor = foreground
@@ -47,7 +47,7 @@ config =
     , --  Date Format Alias RefreshRate
       Run $
         Date
-          (grey2 "%a %b %_d %Y " ++ yellow "%H:%M:%S")
+          (grey2 "%A %B %d %Y " ++ yellow "%H:%M:%S")
           "date"
           (1 `seconds`)
     , -- Weather StationID Args RefreshRate
