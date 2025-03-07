@@ -26,15 +26,15 @@ module XMonadConfig.GruvboxMaterial
 import XMonad.Hooks.StatusBar.PP (xmobarColor)
 
 background :: String
-background = "#1d2021"
+background = "#282828"
 
 foreground :: String
 foreground = "#d4be98"
 
 bg0, bg1, fg0, fg1, red, orange, yellow, green, aqua, blue, purple, grey0, grey1, grey2 :: String -> String
 {- FOURMOLU_DISABLE -}
-bg0    = xmobarColor "#1d2021" ""
-bg1    = xmobarColor "#282828" ""
+bg0    = xmobarColor "#282828" ""
+bg1    = xmobarColor "#32302f" ""
 fg0    = xmobarColor "#d4be98" ""
 fg1    = xmobarColor "#ddc7a1" ""
 red    = xmobarColor "#ea6962" ""
