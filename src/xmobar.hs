@@ -59,7 +59,7 @@ config =
           "YPJT"
           [ "--template"
           , inWrapper (ppTitle "Temp" ++ green "<tempC>C")
-              ++ inWrapper (ppTitle "Wind" ++ purple "<windKmh>km/h")
+              ++ inWrapper (ppTitle "Wind" ++ purple "<windKmh>km" ++ grey0 "/" ++ purple "h")
               ++ inWrapper (ppTitle "Humidity" ++ blue "<rh>%")
           ]
           (30 `minutes`)
