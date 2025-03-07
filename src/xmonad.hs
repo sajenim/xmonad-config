@@ -34,6 +34,7 @@ myConfig = def
     , normalBorderColor  = myNormalBorderColor
     , focusedBorderColor = myFocusedBorderColor
     , workspaces         = myWorkspaces
+    , manageHook         = myManageHook
     } `additionalKeys` myKeybindings
 
 -- | Configuration
@@ -143,3 +144,8 @@ myXmobarPP = def
     , ppOrder           = \[ws, l, _] -> [ws, l]
     }
 
+-- | ManageHook
+myManageHook = composeAll
+    [ className =? "Thunar"    --> doFloat
+    , className =? "Ristretto" --> doFloat
+    ]
