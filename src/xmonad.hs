@@ -135,8 +135,8 @@ myXmobar = statusBarPropTo "_XMONAD_LOG_1" "xmobar" (pure myXmobarPP)
 myXmobarPP :: PP
 myXmobarPP = def
     { ppSep             = grey0         " "
-    , ppCurrent         = purple . wrap " " ""
-    , ppVisible         = blue   . wrap " " ""
+    , ppCurrent         = blue   . wrap " " ""
+    , ppVisible         = purple . wrap " " ""
     , ppHidden          = grey0  . wrap " " ""
     , ppHiddenNoWindows = grey0  . wrap " " ""
     , ppUrgent          = red    . wrap " " ""
