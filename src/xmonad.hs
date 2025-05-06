@@ -148,4 +148,6 @@ myXmobarPP = def
 myManageHook = composeAll
     [ className =? "Thunar"    --> doFloat
     , className =? "Ristretto" --> doFloat
+    , className =? "Tk"        --> doFloat -- python gui development
+    , className =? "TkFDialog" --> doFloat
     ]
