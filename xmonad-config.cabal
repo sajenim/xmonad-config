@@ -66,6 +66,7 @@ executable xmobar
 executable xmonad
   import:        shared
   build-depends:
+    , containers
     , X11
     , xmonad
     , xmonad-contrib

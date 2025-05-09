@@ -1,16 +1,20 @@
+import Data.Map qualified as M
 import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Navigation2D
+import XMonad.Actions.Submap
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.Modal
 import XMonad.Hooks.StatusBar
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.Spacing
 import XMonad.StackSet qualified as W
-import XMonad.Util.EZConfig (additionalKeys)
+import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.Loggers
 
 import Graphics.X11.ExtraTypes.XF86
 
@@ -40,7 +44,7 @@ myConfig = def
     , focusedBorderColor = myFocusedBorderColor
     , workspaces         = myWorkspaces
     , manageHook         = myManageHook
-    } `additionalKeys` myKeybindings
+    } `additionalKeysP` myKeybindings
 
 
 --
@@ -54,6 +58,7 @@ myNormalBorderColor  = "#32302f"
 myFocusedBorderColor = "#32302f"
 myWorkspaces         = ["code", "chat", "web", "games", "misc"]
 myLauncher           = "rofi -modi run,calc -show run"
+myFileManager        = "thunar"
 myScrot              = "scrot -s '%Y%m%d_%H%M%S.png' -e 'mv $f ~/Pictures/scrots/'"
 volumeDown           = "pactl set-sink-volume @DEFAULT_SINK@ -10%"
 volumeUp             = "pactl set-sink-volume @DEFAULT_SINK@ +10%"
@@ -65,94 +70,120 @@ volumeUp             = "pactl set-sink-volume @DEFAULT_SINK@ +10%"
 
 myKeybindings =
     --
-    -- Launching and killing programs
+    -- LeaderKey
     --
 
-    [ ((myModMask,               xK_Return), spawn myTerminal)
-    , ((myModMask,               xK_Tab   ), spawn myLauncher)
-    , ((myModMask,               xK_s     ), spawn myScrot   ) 
-    , ((myModMask,               xK_Escape), kill            )
-    , ((myModMask .|. shiftMask, xK_q     ), io exitSuccess  )
+    -- spawning programs
+    [ ("M-a s t", spawn myTerminal   )
+    , ("M-a s d", spawn myLauncher   )
+    , ("M-a s f", spawn myFileManager)
+    , ("M-a s s", spawn myScrot      )
+
+    -- kill/exit
+    , ("M-a c", kill          )
+    , ("M-a q", io exitSuccess)
+
+    -- directional navigation of windows
+    , ("M-a o", windowGo   U False)
+    , ("M-a n", windowGo   L False)
+    , ("M-a e", windowGo   D False)
+    , ("M-a i", windowGo   R False)
+
+    -- switch workspaces
+    , ("M-a j", windows $ W.greedyView "code" )
+    , ("M-a v", windows $ W.greedyView "chat" )
+    , ("M-a d", windows $ W.greedyView "web"  )
+    , ("M-a r", windows $ W.greedyView "games")
+    , ("M-a s", windows $ W.greedyView "misc" )
+
+    -- focus master window
+    , ("M-a <Space>", windows W.focusMaster)
+
+    -- toggling layouts
+    , ("M-a t", sendMessage $ JumpToLayout "dynamic tiling"        )
+    , ("M-a b", sendMessage $ JumpToLayout "binary space partition")
+    , ("M-a m", sendMessage $ JumpToLayout "maximised"             )
+    , ("M-a f", sendMessage $ JumpToLayout "fullscreen"            )
+
+
+    --
+    -- Modifier Keys
+    --
+
+    -- directional navigation of windows
+    , ("M-<Up>"     , windowGo   U False)
+    , ("M-<Left>"   , windowGo   L False)
+    , ("M-<Down>"   , windowGo   D False)
+    , ("M-<Right>"  , windowGo   R False)
+
+    -- swap adjacent windows
+    , ("M-S-<Up>"   , windowSwap U False)
+    , ("M-S-<Left>" , windowSwap L False)
+    , ("M-S-<Down>" , windowSwap D False)
+    , ("M-S-<Right>", windowSwap R False)
+
+    -- enable edit mode
+    , ("M1-<Space>", setMode "edit")
 
 
     --
     -- Multimedia
     --
 
-    , ((noModMask, xF86XK_AudioPlay       ), spawn "mpc toggle")
-    , ((noModMask, xF86XK_AudioStop       ), spawn "mpc stop"  )
-    , ((noModMask, xF86XK_AudioNext       ), spawn "mpc next"  )
-    , ((noModMask, xF86XK_AudioPrev       ), spawn "mpc prev"  )
-    , ((noModMask, xF86XK_AudioLowerVolume), spawn volumeDown  )
-    , ((noModMask, xF86XK_AudioRaiseVolume), spawn volumeUp    )
+    , ("<XF86AudioPlay>"       , spawn "mpc toggle")
+    , ("<XF86AudioStop>"       , spawn "mpc stop"  )
+    , ("<XF86AudioNext>"       , spawn "mpc next"  )
+    , ("<XF86AudioPrev>"       , spawn "mpc prev"  )
+    , ("<XF86AudioLowerVolume>", spawn volumeDown  )
+    , ("<XF86AudioRaiseVolume>", spawn volumeUp    )
+    ]
 
 
-    --
-    -- Navigation
-    --
+--
+-- Modal keybindings
+--
 
+editMode :: Mode
+editMode = mode "edit" $ mkKeysEz
     -- directional navigation of windows
-    , ((myModMask,               xK_Right), windowGo   R False)
-    , ((myModMask,               xK_Left ), windowGo   L False)
-    , ((myModMask,               xK_Up   ), windowGo   U False)
-    , ((myModMask,               xK_Down ), windowGo   D False)
+    [ ("o", windowGo   U False)
+    , ("n", windowGo   L False)
+    , ("e", windowGo   D False)
+    , ("i", windowGo   R False)
 
     -- swap adjacent windows
-    , ((myModMask .|. shiftMask, xK_Right), windowSwap R False)
-    , ((myModMask .|. shiftMask, xK_Left ), windowSwap L False)
-    , ((myModMask .|. shiftMask, xK_Up   ), windowSwap U False)
-    , ((myModMask .|. shiftMask, xK_Down ), windowSwap D False)
-
-    -- workspaces
-    , ((myModMask, xK_Page_Up  ), moveTo Prev hiddenWS)
-    , ((myModMask, xK_Page_Down), moveTo Next hiddenWS)
-
-    -- layouts
-    , ((myModMask,               xK_t), sendMessage $ JumpToLayout "dynamic tiling"        )
-    , ((myModMask,               xK_b), sendMessage $ JumpToLayout "binary space partition")
-    , ((myModMask,               xK_m), sendMessage $ JumpToLayout "maximised"             )
-    , ((myModMask,               xK_f), sendMessage $ JumpToLayout "fullscreen"            )
-    , ((myModMask .|. shiftMask, xK_t), withFocused $ windows . W.sink                     )
-
-
-    --
-    -- DynamicTiling
-    --
-
-    -- move/swap focus of master
-    , ((myModMask,               xK_BackSpace), windows W.focusMaster)
-    , ((myModMask .|. shiftMask, xK_BackSpace), windows W.swapMaster )
-
-    -- shrink/expand the master area
-    , ((myModMask, xK_Home), sendMessage Shrink)
-    , ((myModMask, xK_End ), sendMessage Expand)
-
-    -- number of windows in the master area
-    , ((myModMask .|. shiftMask, xK_Home), sendMessage (IncMasterN 1)   )
-    , ((myModMask .|. shiftMask, xK_End ), sendMessage (IncMasterN (-1)))
-
-
-    --
-    -- BinarySpacePartition
-    --
+    , ("S-o", windowSwap U False)
+    , ("S-n", windowSwap L False)
+    , ("S-e", windowSwap D False)
+    , ("S-i", windowSwap R False)
 
     -- expand windows
-    , ((myModMask .|. mod1Mask, xK_Right), sendMessage $ ExpandTowardsBy R 0.01)
-    , ((myModMask .|. mod1Mask, xK_Left ), sendMessage $ ExpandTowardsBy L 0.01)
-    , ((myModMask .|. mod1Mask, xK_Down ), sendMessage $ ExpandTowardsBy D 0.01)
-    , ((myModMask .|. mod1Mask, xK_Up   ), sendMessage $ ExpandTowardsBy U 0.01)
+    , ("M1-o", sendMessage $ ExpandTowardsBy U 0.01)
+    , ("M1-n", sendMessage $ ExpandTowardsBy L 0.01)
+    , ("M1-e", sendMessage $ ExpandTowardsBy D 0.01)
+    , ("M1-i", sendMessage $ ExpandTowardsBy R 0.01)
 
     -- shrink windows
-    , ((myModMask .|. mod1Mask .|. controlMask, xK_Right), sendMessage $ ShrinkFromBy R 0.01)
-    , ((myModMask .|. mod1Mask .|. controlMask, xK_Left ), sendMessage $ ShrinkFromBy L 0.01)
-    , ((myModMask .|. mod1Mask .|. controlMask, xK_Down ), sendMessage $ ShrinkFromBy D 0.01)
-    , ((myModMask .|. mod1Mask .|. controlMask, xK_Up   ), sendMessage $ ShrinkFromBy U 0.01)
+    , ("M1-C-o", sendMessage $ ShrinkFromBy U 0.01)
+    , ("M1-C-n", sendMessage $ ShrinkFromBy L 0.01)
+    , ("M1-C-e", sendMessage $ ShrinkFromBy D 0.01)
+    , ("M1-C-i", sendMessage $ ShrinkFromBy R 0.01)
 
-    -- layout manipulation
-    , ((myModMask .|. mod1Mask, xK_Return   ), sendMessage Rotate           )
-    , ((myModMask .|. mod1Mask, xK_BackSpace), sendMessage Swap             )
-    , ((myModMask .|. mod1Mask, xK_Home     ), sendMessage $ SplitShift Prev)
-    , ((myModMask .|. mod1Mask, xK_End      ), sendMessage $ SplitShift Next)
+    -- shrink/expand the master area
+    , ("M-f", sendMessage Shrink)
+    , ("M-u", sendMessage Expand)
+
+    -- number of windows in the master area
+    , ("S-f", sendMessage (IncMasterN 1)   )
+    , ("S-u", sendMessage (IncMasterN (-1)))
+
+    -- swap/rotate
+    , ("M1-r", sendMessage Rotate)
+    , ("M1-s", sendMessage Swap  )
+
+    -- split shift
+    , ("M1-f", sendMessage $ SplitShift Prev)
+    , ("M1-u", sendMessage $ SplitShift Next)
     ]
 
 
@@ -191,6 +222,7 @@ myXmobarPP = def
     , ppUrgent          = red    . wrap " " ""
     , ppLayout          = aqua   . wrap (grey0 " <fn=1>[</fn> ") (grey0 " <fn=1>]</fn> ")
     , ppOrder           = \[ws, l, _] -> [ws, l]
+    , ppExtras          = [logMode]
     }
 
 
