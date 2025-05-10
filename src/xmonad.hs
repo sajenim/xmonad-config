@@ -13,7 +13,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.Spacing
 import XMonad.StackSet qualified as W
-import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 
 import Graphics.X11.ExtraTypes.XF86
@@ -32,6 +32,7 @@ main = xmonad
      . ewmhFullscreen
      . ewmh
      . withNavigation2DConfig def 
+     . modal [editMode]
      . withSB myXmobar
      $ myConfig
 
@@ -44,8 +45,8 @@ myConfig = def
     , focusedBorderColor = myFocusedBorderColor
     , workspaces         = myWorkspaces
     , manageHook         = myManageHook
-    } `additionalKeysP` myKeybindings
-
+    , keys               = (`mkKeymap` myKeymap)
+    } 
 
 --
 -- Configuration
@@ -68,7 +69,7 @@ volumeUp             = "pactl set-sink-volume @DEFAULT_SINK@ +10%"
 -- Keybindings
 --
 
-myKeybindings =
+myKeymap =
     --
     -- LeaderKey
     --
@@ -80,30 +81,30 @@ myKeybindings =
     , ("M-a s s", spawn myScrot      )
 
     -- kill/exit
-    , ("M-a c", kill          )
-    , ("M-a q", io exitSuccess)
+    , ("M-a s c", kill          )
+    , ("M-a s q", io exitSuccess)
 
     -- directional navigation of windows
-    , ("M-a o", windowGo   U False)
-    , ("M-a n", windowGo   L False)
-    , ("M-a e", windowGo   D False)
-    , ("M-a i", windowGo   R False)
+    , ("M-a g o", windowGo   U False)
+    , ("M-a g n", windowGo   L False)
+    , ("M-a g e", windowGo   D False)
+    , ("M-a g i", windowGo   R False)
 
     -- switch workspaces
-    , ("M-a j", windows $ W.greedyView "code" )
-    , ("M-a v", windows $ W.greedyView "chat" )
-    , ("M-a d", windows $ W.greedyView "web"  )
-    , ("M-a r", windows $ W.greedyView "games")
-    , ("M-a s", windows $ W.greedyView "misc" )
+    , ("M-a g j", windows $ W.greedyView "code" )
+    , ("M-a g v", windows $ W.greedyView "chat" )
+    , ("M-a g d", windows $ W.greedyView "web"  )
+    , ("M-a g r", windows $ W.greedyView "games")
+    , ("M-a g s", windows $ W.greedyView "misc" )
 
     -- focus master window
-    , ("M-a <Space>", windows W.focusMaster)
+    , ("M-a g m", windows W.focusMaster)
 
     -- toggling layouts
-    , ("M-a t", sendMessage $ JumpToLayout "dynamic tiling"        )
-    , ("M-a b", sendMessage $ JumpToLayout "binary space partition")
-    , ("M-a m", sendMessage $ JumpToLayout "maximised"             )
-    , ("M-a f", sendMessage $ JumpToLayout "fullscreen"            )
+    , ("M-a j t", sendMessage $ JumpToLayout "dynamic tiling"        )
+    , ("M-a j b", sendMessage $ JumpToLayout "binary space partition")
+    , ("M-a j m", sendMessage $ JumpToLayout "maximised"             )
+    , ("M-a j f", sendMessage $ JumpToLayout "fullscreen"            )
 
 
     --
