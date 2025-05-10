@@ -123,6 +123,20 @@ myKeymap =
     , ("M-S-<Down>" , windowSwap D False)
     , ("M-S-<Right>", windowSwap R False)
 
+    -- switch workspaces
+    , ("M-1", windows $ W.greedyView "code" )
+    , ("M-2", windows $ W.greedyView "chat" )
+    , ("M-3", windows $ W.greedyView "web"  )
+    , ("M-4", windows $ W.greedyView "games")
+    , ("M-5", windows $ W.greedyView "misc" )
+
+    -- send window to workspace
+    , ("M-S-1", windows $ W.shift "code" )
+    , ("M-S-2", windows $ W.shift "chat" )
+    , ("M-S-3", windows $ W.shift "web"  )
+    , ("M-S-4", windows $ W.shift "games")
+    , ("M-S-5", windows $ W.shift "misc" )
+
     -- enable edit mode
     , ("M1-<Space>", setMode "edit")
 
