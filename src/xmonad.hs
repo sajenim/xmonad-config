@@ -76,29 +76,16 @@ myKeymap =
 
     -- spawning programs
     [ ("M-a s t", spawn myTerminal   )
-    , ("M-a s d", spawn myLauncher   )
+    , ("M-a s l", spawn myLauncher   )
     , ("M-a s f", spawn myFileManager)
     , ("M-a s s", spawn myScrot      )
 
     -- kill/exit
-    , ("M-a s c", kill          )
-    , ("M-a s q", io exitSuccess)
-
-    -- directional navigation of windows
-    , ("M-a g o", windowGo   U False)
-    , ("M-a g n", windowGo   L False)
-    , ("M-a g e", windowGo   D False)
-    , ("M-a g i", windowGo   R False)
-
-    -- switch workspaces
-    , ("M-a g j", windows $ W.greedyView "code" )
-    , ("M-a g v", windows $ W.greedyView "chat" )
-    , ("M-a g d", windows $ W.greedyView "web"  )
-    , ("M-a g r", windows $ W.greedyView "games")
-    , ("M-a g s", windows $ W.greedyView "misc" )
+    , ("M-a c", kill          )
+    , ("M-a q", io exitSuccess)
 
     -- focus master window
-    , ("M-a g m", windows W.focusMaster)
+    , ("M-a <Backspace>", windows W.focusMaster)
 
     -- toggling layouts
     , ("M-a j t", sendMessage $ JumpToLayout "dynamic tiling"        )
@@ -236,7 +223,7 @@ myXmobarPP = def
     , ppHiddenNoWindows = grey0  . wrap " " ""
     , ppUrgent          = red    . wrap " " ""
     , ppLayout          = aqua   . wrap (grey0 " <fn=1>[</fn> ") (grey0 " <fn=1>]</fn> ")
-    , ppOrder           = \[ws, l, _] -> [ws, l]
+    , ppOrder           = \[ws, l, _, mode] -> [ws, l, mode]
     , ppExtras          = [logMode]
     }
 
