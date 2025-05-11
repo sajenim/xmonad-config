@@ -14,6 +14,7 @@ import XMonad.Layout.Renamed
 import XMonad.Layout.Spacing
 import XMonad.StackSet qualified as W
 import XMonad.Util.EZConfig
+import XMonad.Util.Font
 import XMonad.Util.Loggers
 
 import Graphics.X11.ExtraTypes.XF86
@@ -218,14 +219,17 @@ myXmobarPP :: PP
 myXmobarPP = def
     { ppSep             = grey0         " "
     , ppCurrent         = blue   . wrap " " ""
+    , ppTitle           = grey2  . wrap (grey0 " <fn=1>[</fn> ") (grey0 " <fn=1>]</fn>") . shorten 32
     , ppVisible         = purple . wrap " " ""
     , ppHidden          = grey0  . wrap " " ""
     , ppHiddenNoWindows = grey0  . wrap " " ""
     , ppUrgent          = red    . wrap " " ""
     , ppLayout          = aqua   . wrap (grey0 " <fn=1>[</fn> ") (grey0 " <fn=1>]</fn> ")
-    , ppOrder           = \[ws, l, _, mode] -> [ws, l, mode]
-    , ppExtras          = [logMode]
+    , ppOrder           = \case { [ws, l, title, mode] -> [ws, l, mode, title]; xs -> xs }
+    , ppExtras          = [lMode]
     }
+  where
+    lMode = xmobarColorL "#d8a657" "#282828" . fixedWidthL AlignCenter "-" 4 $ logMode
 
 
 --
