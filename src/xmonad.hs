@@ -173,8 +173,8 @@ editMode = mode "edit" $ mkKeysEz
     , ("M1-C-i", sendMessage $ ShrinkFromBy R 0.01)
 
     -- shrink/expand the master area
-    , ("M-f", sendMessage Shrink)
-    , ("M-u", sendMessage Expand)
+    , ("f", sendMessage Shrink)
+    , ("u", sendMessage Expand)
 
     -- number of windows in the master area
     , ("S-f", sendMessage (IncMasterN 1)   )
