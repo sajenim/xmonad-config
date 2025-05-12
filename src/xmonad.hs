@@ -148,6 +148,10 @@ myKeymap =
 
 editMode :: Mode
 editMode = mode "edit" $ mkKeysEz
+    --
+    -- Navigation2D / DynamicTiling
+    --
+
     -- directional navigation of windows
     [ ("o", windowGo   U False)
     , ("n", windowGo   L False)
@@ -160,6 +164,18 @@ editMode = mode "edit" $ mkKeysEz
     , ("S-e", windowSwap D False)
     , ("S-i", windowSwap R False)
 
+    -- shrink/expand the master area
+    , ("f", sendMessage Shrink)
+    , ("u", sendMessage Expand)
+
+    -- number of windows in the master area
+    , ("S-f", sendMessage (IncMasterN 1)   )
+    , ("S-u", sendMessage (IncMasterN (-1)))
+
+    --
+    -- BinarySpacePartition
+    --
+
     -- expand windows
     , ("M1-o", sendMessage $ ExpandTowardsBy U 0.01)
     , ("M1-n", sendMessage $ ExpandTowardsBy L 0.01)
@@ -171,14 +187,6 @@ editMode = mode "edit" $ mkKeysEz
     , ("M1-C-n", sendMessage $ ShrinkFromBy L 0.01)
     , ("M1-C-e", sendMessage $ ShrinkFromBy D 0.01)
     , ("M1-C-i", sendMessage $ ShrinkFromBy R 0.01)
-
-    -- shrink/expand the master area
-    , ("f", sendMessage Shrink)
-    , ("u", sendMessage Expand)
-
-    -- number of windows in the master area
-    , ("S-f", sendMessage (IncMasterN 1)   )
-    , ("S-u", sendMessage (IncMasterN (-1)))
 
     -- swap/rotate
     , ("M1-r", sendMessage Rotate)
