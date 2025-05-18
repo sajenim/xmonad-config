@@ -77,7 +77,7 @@ myKeymap =
 
     -- spawning programs
     [ ("M-<Space> s t", spawn myTerminal   )
-    , ("M-<Space> s l", spawn myLauncher   )
+    , ("M-<Space> s d", spawn myLauncher   )
     , ("M-<Space> s f", spawn myFileManager)
     , ("M-<Space> s s", spawn myScrot      )
 
