@@ -118,8 +118,8 @@ myKeymap =
     , ("M-5", windows $ W.greedyView "misc" )
 
     -- cycle workspaces
-    , ("M-<Home>", prevWS)
-    , ("M-<End>" , nextWS)
+    , ("M-<Home>", moveTo Prev hiddenWS)
+    , ("M-<End>" , moveTo Next hiddenWS)
 
     -- send window to workspace
     , ("M-S-1", windows $ W.shift "code" )
