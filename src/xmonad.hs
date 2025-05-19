@@ -76,14 +76,13 @@ myKeymap =
     --
 
     -- spawning programs
-    [ ("M-<Space> s t", spawn myTerminal   )
-    , ("M-<Space> s d", spawn myLauncher   )
-    , ("M-<Space> s f", spawn myFileManager)
-    , ("M-<Space> s s", spawn myScrot      )
+    [ ("M-<Space> <Return>", spawn myTerminal   )
+    , ("M-<Space> s d"     , spawn myLauncher   )
+    , ("M-<Space> s f"     , spawn myFileManager)
+    , ("M-<Space> s s"     , spawn myScrot      )
 
-    -- kill/exit
-    , ("M-<Space> c", kill          )
-    , ("M-<Space> q", io exitSuccess)
+    -- quit window
+    , ("M-<Space> q", kill)
 
     -- focus master window
     , ("M-<Space> <Backspace>", windows W.focusMaster)
@@ -117,6 +116,10 @@ myKeymap =
     , ("M-3", windows $ W.greedyView "web"  )
     , ("M-4", windows $ W.greedyView "games")
     , ("M-5", windows $ W.greedyView "misc" )
+
+    -- cycle workspaces
+    , ("M-<Home>", prevWS)
+    , ("M-<End>" , nextWS)
 
     -- send window to workspace
     , ("M-S-1", windows $ W.shift "code" )
@@ -177,24 +180,24 @@ editMode = mode "edit" $ mkKeysEz
     --
 
     -- expand windows
-    , ("M1-o", sendMessage $ ExpandTowardsBy U 0.01)
-    , ("M1-n", sendMessage $ ExpandTowardsBy L 0.01)
-    , ("M1-e", sendMessage $ ExpandTowardsBy D 0.01)
-    , ("M1-i", sendMessage $ ExpandTowardsBy R 0.01)
+    , ("M-o", sendMessage $ ExpandTowardsBy U 0.01)
+    , ("M-n", sendMessage $ ExpandTowardsBy L 0.01)
+    , ("M-e", sendMessage $ ExpandTowardsBy D 0.01)
+    , ("M-i", sendMessage $ ExpandTowardsBy R 0.01)
 
     -- shrink windows
-    , ("M1-C-o", sendMessage $ ShrinkFromBy U 0.01)
-    , ("M1-C-n", sendMessage $ ShrinkFromBy L 0.01)
-    , ("M1-C-e", sendMessage $ ShrinkFromBy D 0.01)
-    , ("M1-C-i", sendMessage $ ShrinkFromBy R 0.01)
+    , ("M-M1-o", sendMessage $ ShrinkFromBy U 0.01)
+    , ("M-M1-n", sendMessage $ ShrinkFromBy L 0.01)
+    , ("M-M1-e", sendMessage $ ShrinkFromBy D 0.01)
+    , ("M-M1-i", sendMessage $ ShrinkFromBy R 0.01)
 
     -- swap/rotate
-    , ("M1-r", sendMessage Rotate)
-    , ("M1-s", sendMessage Swap  )
+    , ("M-r", sendMessage Rotate)
+    , ("M-s", sendMessage Swap  )
 
     -- split shift
-    , ("M1-f", sendMessage $ SplitShift Prev)
-    , ("M1-u", sendMessage $ SplitShift Next)
+    , ("M-f", sendMessage $ SplitShift Prev)
+    , ("M-u", sendMessage $ SplitShift Next)
     ]
 
 
