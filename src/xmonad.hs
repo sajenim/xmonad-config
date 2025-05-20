@@ -248,8 +248,9 @@ myXmobarPP = def
 --
 
 myManageHook = composeAll
-    [ className =? "Thunar"    --> doFloat
-    , className =? "Ristretto" --> doFloat
-    , className =? "Tk"        --> doFloat -- python gui development
-    , className =? "TkFDialog" --> doFloat -- ^^
+    [ className =? "Thunar"     --> doFloat
+    , className =? "Ristretto"  --> doFloat
+    , className =? "bloom-base" --> doFloat
+    , className =? "Tk"         --> doFloat -- python gui development
+    , className =? "TkFDialog"  --> doFloat -- ^^
     ]
