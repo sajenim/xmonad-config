@@ -18,7 +18,7 @@ config =
     , border = BottomB
     , borderColor = "#32302f"
     , borderWidth = 5
-    , position = Static {xpos = 1080, ypos = 0, width = 2560, height = 28}
+    , position = Static {xpos = 1920, ypos = 0, width = 2560, height = 28}
     , commands = myCommands
     , sepChar = "%"
     , alignSep = "}{"
