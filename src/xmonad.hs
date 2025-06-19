@@ -110,6 +110,10 @@ myKeymap =
     , ("M-S-<Down>" , windowSwap D False)
     , ("M-S-<Right>", windowSwap R False)
 
+    -- cycle windows
+    , ("M-<Page_Up>"  , windows W.focusUp  )
+    , ("M-<Page_Down>", windows W.focusDown)
+
     -- switch workspaces
     , ("M-1", windows $ W.greedyView "code" )
     , ("M-2", windows $ W.greedyView "chat" )
@@ -250,7 +254,6 @@ myXmobarPP = def
 myManageHook = composeAll
     [ className =? "Thunar"     --> doFloat
     , className =? "Ristretto"  --> doFloat
-    , className =? "bloom-base" --> doFloat
     , className =? "Tk"         --> doFloat -- python gui development
     , className =? "TkFDialog"  --> doFloat -- ^^
     ]
