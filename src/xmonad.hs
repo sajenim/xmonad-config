@@ -60,7 +60,6 @@ myNormalBorderColor  = "#32302f"
 myFocusedBorderColor = "#32302f"
 myWorkspaces         = ["code", "chat", "web", "games", "misc"]
 myLauncher           = "dmenu_run -fn 'Fisa Code-10'"
-myFileManager        = "thunar"
 myScrot              = "scrot -s '%Y%m%d_%H%M%S.png' -e 'mv $f ~/Pictures/scrots/'"
 volumeDown           = "pactl set-sink-volume @DEFAULT_SINK@ -10%"
 volumeUp             = "pactl set-sink-volume @DEFAULT_SINK@ +10%"
@@ -76,22 +75,21 @@ myKeymap =
     --
 
     -- spawning programs
-    [ ("M-a <Return>", spawn myTerminal   )
-    , ("M-a s d"     , spawn myLauncher   )
-    , ("M-a s f"     , spawn myFileManager)
-    , ("M-a s s"     , spawn myScrot      )
+    [ ("M-a n", spawn myTerminal   )
+    , ("M-a e", spawn myLauncher   )
+    , ("M-a s", spawn myScrot      )
 
     -- quit window
     , ("M-a q", kill)
 
-    -- focus master window
-    , ("M-a <Backspace>", windows W.focusMaster)
-
     -- toggling layouts
-    , ("M-a j t", sendMessage $ JumpToLayout "dynamic tiling"        )
-    , ("M-a j b", sendMessage $ JumpToLayout "binary space partition")
-    , ("M-a j m", sendMessage $ JumpToLayout "maximised"             )
-    , ("M-a j f", sendMessage $ JumpToLayout "fullscreen"            )
+    , ("M-a t", sendMessage $ JumpToLayout "dynamic tiling"        )
+    , ("M-a b", sendMessage $ JumpToLayout "binary space partition")
+    , ("M-a m", sendMessage $ JumpToLayout "maximised"             )
+    , ("M-a f", sendMessage $ JumpToLayout "fullscreen"            )
+
+    -- enable modal modes
+    , ("M-a m e", setMode "edit")
 
 
     --
@@ -131,9 +129,6 @@ myKeymap =
     , ("M-S-3", windows $ W.shift "web"  )
     , ("M-S-4", windows $ W.shift "games")
     , ("M-S-5", windows $ W.shift "misc" )
-
-    -- enable edit mode
-    , ("M-a m e", setMode "edit")
 
 
     --
