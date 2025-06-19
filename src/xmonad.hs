@@ -76,22 +76,22 @@ myKeymap =
     --
 
     -- spawning programs
-    [ ("M-a <Return>", spawn myTerminal   )
-    , ("M-a s d"     , spawn myLauncher   )
-    , ("M-a s f"     , spawn myFileManager)
-    , ("M-a s s"     , spawn myScrot      )
+    [ ("M-a n", spawn myTerminal   )
+    , ("M-a e", spawn myLauncher   )
+    , ("M-a f", spawn myFileManager)
+    , ("M-a s", spawn myScrot      )
 
     -- quit window
     , ("M-a q", kill)
 
-    -- focus master window
-    , ("M-a <Backspace>", windows W.focusMaster)
-
     -- toggling layouts
-    , ("M-a j t", sendMessage $ JumpToLayout "dynamic tiling"        )
-    , ("M-a j b", sendMessage $ JumpToLayout "binary space partition")
-    , ("M-a j m", sendMessage $ JumpToLayout "maximised"             )
-    , ("M-a j f", sendMessage $ JumpToLayout "fullscreen"            )
+    , ("M-a <Backspace> t", sendMessage $ JumpToLayout "dynamic tiling"        )
+    , ("M-a <Backspace> b", sendMessage $ JumpToLayout "binary space partition")
+    , ("M-a <Backspace> m", sendMessage $ JumpToLayout "maximised"             )
+    , ("M-a <Backspace> f", sendMessage $ JumpToLayout "fullscreen"            )
+
+    -- enable modal modes
+    , ("M-a m e", setMode "edit")
 
 
     --
@@ -131,9 +131,6 @@ myKeymap =
     , ("M-S-3", windows $ W.shift "web"  )
     , ("M-S-4", windows $ W.shift "games")
     , ("M-S-5", windows $ W.shift "misc" )
-
-    -- enable edit mode
-    , ("M-a m e", setMode "edit")
 
 
     --
