@@ -62,8 +62,6 @@ myWorkspaces         = ["code", "chat", "web", "games", "misc"]
 myLauncher           = "dmenu_run -fn 'Fisa Code-10'"
 myFileManager        = "thunar"
 myScrot              = "scrot -s '%Y%m%d_%H%M%S.png' -e 'mv $f ~/Pictures/scrots/'"
-volumeDown           = "pactl set-sink-volume @DEFAULT_SINK@ -10%"
-volumeUp             = "pactl set-sink-volume @DEFAULT_SINK@ +10%"
 
 
 --
@@ -141,8 +139,8 @@ myKeymap =
     , ("<XF86AudioStop>"       , spawn "mpc stop"  )
     , ("<XF86AudioNext>"       , spawn "mpc next"  )
     , ("<XF86AudioPrev>"       , spawn "mpc prev"  )
-    , ("<XF86AudioLowerVolume>", spawn volumeDown  )
-    , ("<XF86AudioRaiseVolume>", spawn volumeUp    )
+    , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%")
+    , ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%")
     ]
 
 
