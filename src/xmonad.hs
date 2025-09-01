@@ -1,3 +1,4 @@
+import Data.List as L
 import Data.Map qualified as M
 import XMonad
 import XMonad.Actions.CycleWS
@@ -246,9 +247,13 @@ myXmobarPP = def
 -- ManageHook
 --
 
+(~?) :: Eq a => Query [a] -> [a] -> Query Bool
+q ~? x = fmap (x `L.isInfixOf`) q
+
 myManageHook = composeAll
     [ className =? "Thunar"     --> doFloat
     , className =? "Ristretto"  --> doFloat
-    , className =? "Tk"         --> doFloat -- python gui development
+    , className =? "Tk"         --> doFloat -- gui development (python)
     , className =? "TkFDialog"  --> doFloat -- ^^
+    , className ~? "App"        --> doFloat -- gui development (java)
     ]
