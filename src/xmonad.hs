@@ -1,21 +1,17 @@
 import Data.List as L
-import Data.Map qualified as M
 import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Navigation2D
-import XMonad.Actions.Submap
+import XMonad.Actions.RotSlaves
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.Modal
 import XMonad.Hooks.StatusBar
-import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.Spacing
 import XMonad.StackSet qualified as W
 import XMonad.Util.EZConfig
-import XMonad.Util.Font
 import XMonad.Util.Loggers
 
 import Graphics.X11.ExtraTypes.XF86
@@ -33,8 +29,7 @@ main = xmonad
      . docks
      . ewmhFullscreen
      . ewmh
-     . withNavigation2DConfig def 
-     . modal [editMode]
+     . withNavigation2DConfig def
      . withSB myXmobar
      $ myConfig
 
@@ -77,24 +72,20 @@ myKeymap =
     -- spawning programs
     [ ("M-a n", spawn myTerminal   )
     , ("M-a e", spawn myLauncher   )
-    , ("M-a f", spawn myFileManager)
+    , ("M-a t", spawn myFileManager)
     , ("M-a s", spawn myScrot      )
+
+    -- toggling layouts
+    , ("M-a d", sendMessage $ JumpToLayout "dynamic tiling")
+    , ("M-a m", sendMessage $ JumpToLayout "maximised"     )
+    , ("M-a f", sendMessage $ JumpToLayout "fullscreen"    )
 
     -- quit window
     , ("M-a q", kill)
 
-    -- toggling layouts
-    , ("M-a <Backspace> t", sendMessage $ JumpToLayout "dynamic tiling"        )
-    , ("M-a <Backspace> b", sendMessage $ JumpToLayout "binary space partition")
-    , ("M-a <Backspace> m", sendMessage $ JumpToLayout "maximised"             )
-    , ("M-a <Backspace> f", sendMessage $ JumpToLayout "fullscreen"            )
-
-    -- enable modal modes
-    , ("M-a m e", setMode "edit")
-
 
     --
-    -- Modifier Keys
+    -- Layout Navigation
     --
 
     -- directional navigation of windows
@@ -103,15 +94,21 @@ myKeymap =
     , ("M-<Down>"   , windowGo   D False)
     , ("M-<Right>"  , windowGo   R False)
 
-    -- swap adjacent windows
-    , ("M-S-<Up>"   , windowSwap U False)
-    , ("M-S-<Left>" , windowSwap L False)
-    , ("M-S-<Down>" , windowSwap D False)
-    , ("M-S-<Right>", windowSwap R False)
-
     -- cycle windows
     , ("M-<Page_Up>"  , windows W.focusUp  )
     , ("M-<Page_Down>", windows W.focusDown)
+
+    -- window rotation
+    , ("M-C-<Page_Up>", rotAllUp)
+    , ("M-C-<Page_Down>", rotAllDown)
+
+    -- cycle workspaces
+    , ("M-<Home>", moveTo Prev hiddenWS)
+    , ("M-<End>" , moveTo Next hiddenWS)
+
+    -- focus screens (directional)
+    , ("M-C-<Home>", screenGo L False)  -- focus left monitor
+    , ("M-C-<End>",  screenGo R False)  -- focus right monitor
 
     -- switch workspaces
     , ("M-1", windows $ W.greedyView "code" )
@@ -120,16 +117,22 @@ myKeymap =
     , ("M-4", windows $ W.greedyView "games")
     , ("M-5", windows $ W.greedyView "misc" )
 
-    -- cycle workspaces
-    , ("M-<Home>", moveTo Prev hiddenWS)
-    , ("M-<End>" , moveTo Next hiddenWS)
-
     -- send window to workspace
     , ("M-S-1", windows $ W.shift "code" )
     , ("M-S-2", windows $ W.shift "chat" )
     , ("M-S-3", windows $ W.shift "web"  )
     , ("M-S-4", windows $ W.shift "games")
     , ("M-S-5", windows $ W.shift "misc" )
+
+    -- master pane manipulation
+    , ("M-C-<Left>",  sendMessage Shrink)            -- control layout: shrink master
+    , ("M-C-<Right>", sendMessage Expand)            -- control layout: expand master
+    , ("M-S-<Left>",  sendMessage (IncMasterN (-1))) -- shift windows: fewer in master
+    , ("M-S-<Right>", sendMessage (IncMasterN 1))    -- shift windows: more in master
+
+    -- master window operations
+    , ("M-<Delete>", windows W.focusMaster)
+    , ("M-S-<Delete>", windows W.swapMaster)
 
 
     --
@@ -146,72 +149,15 @@ myKeymap =
 
 
 --
--- Modal keybindings
---
-
-editMode :: Mode
-editMode = mode "edit" $ mkKeysEz
-    --
-    -- Navigation2D / DynamicTiling
-    --
-
-    -- directional navigation of windows
-    [ ("o", windowGo   U False)
-    , ("n", windowGo   L False)
-    , ("e", windowGo   D False)
-    , ("i", windowGo   R False)
-
-    -- swap adjacent windows
-    , ("S-o", windowSwap U False)
-    , ("S-n", windowSwap L False)
-    , ("S-e", windowSwap D False)
-    , ("S-i", windowSwap R False)
-
-    -- shrink/expand the master area
-    , ("f", sendMessage Shrink)
-    , ("u", sendMessage Expand)
-
-    -- number of windows in the master area
-    , ("S-f", sendMessage (IncMasterN 1)   )
-    , ("S-u", sendMessage (IncMasterN (-1)))
-
-    --
-    -- BinarySpacePartition
-    --
-
-    -- expand windows
-    , ("M-o", sendMessage $ ExpandTowardsBy U 0.01)
-    , ("M-n", sendMessage $ ExpandTowardsBy L 0.01)
-    , ("M-e", sendMessage $ ExpandTowardsBy D 0.01)
-    , ("M-i", sendMessage $ ExpandTowardsBy R 0.01)
-
-    -- shrink windows
-    , ("M-M1-o", sendMessage $ ShrinkFromBy U 0.01)
-    , ("M-M1-n", sendMessage $ ShrinkFromBy L 0.01)
-    , ("M-M1-e", sendMessage $ ShrinkFromBy D 0.01)
-    , ("M-M1-i", sendMessage $ ShrinkFromBy R 0.01)
-
-    -- swap/rotate
-    , ("M-r", sendMessage Rotate)
-    , ("M-s", sendMessage Swap  )
-
-    -- split shift
-    , ("M-f", sendMessage $ SplitShift Prev)
-    , ("M-u", sendMessage $ SplitShift Next)
-    ]
-
-
---
 -- Layouts
 --
 
-myLayouts = myTile ||| myBsp ||| myMax ||| myFull
+myLayouts = myTile ||| myMax ||| myFull
   where
     -- our layouts
-    myTile     = renamed [Replace "dynamic tiling"        ] . avoidStruts . myGaps $ Tall nmaster delta ratio
-    myBsp      = renamed [Replace "binary space partition"] . avoidStruts . myGaps $ emptyBSP
-    myMax      = renamed [Replace "maximised"             ] . avoidStruts . myGaps $ Full
-    myFull     = renamed [Replace "fullscreen"            ] . noBorders            $ Full
+    myTile     = renamed [Replace "dynamic tiling"] . avoidStruts . myGaps $ Tall nmaster delta ratio
+    myMax      = renamed [Replace "maximised"     ] . avoidStruts . myGaps $ Full
+    myFull     = renamed [Replace "fullscreen"    ] . noBorders            $ Full
     -- add a configurable amount of space around windows.
     myGaps     = spacingRaw False (Border 10 10 10 10) True (Border 10 10 10 10) True
     -- layout configuration
@@ -236,11 +182,8 @@ myXmobarPP = def
     , ppHiddenNoWindows = grey0  . wrap " " ""
     , ppUrgent          = red    . wrap " " ""
     , ppLayout          = aqua   . wrap (grey0 " <fn=1>[</fn> ") (grey0 " <fn=1>]</fn> ")
-    , ppOrder           = \case { [ws, l, title, mode] -> [ws, l, mode, title]; xs -> xs }
-    , ppExtras          = [lMode]
+    , ppOrder           = \[ws, l, _] -> [ws, l]
     }
-  where
-    lMode = xmobarColorL "#d8a657" "#282828" . fixedWidthL AlignCenter "-" 4 $ logMode
 
 
 --
