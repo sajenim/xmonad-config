@@ -99,7 +99,7 @@ myKeymap =
     , ("M-<Page_Down>", windows W.focusDown)
 
     -- window rotation
-    , ("M-C-<Page_Up>", rotAllUp)
+    , ("M-C-<Page_Up>",   rotAllUp)
     , ("M-C-<Page_Down>", rotAllDown)
 
     -- cycle workspaces
@@ -127,8 +127,8 @@ myKeymap =
     -- master pane manipulation
     , ("M-C-<Left>",  sendMessage Shrink)            -- control layout: shrink master
     , ("M-C-<Right>", sendMessage Expand)            -- control layout: expand master
-    , ("M-S-<Left>",  sendMessage (IncMasterN (-1))) -- shift windows: fewer in master
-    , ("M-S-<Right>", sendMessage (IncMasterN 1))    -- shift windows: more in master
+    , ("M-S-<Left>",  sendMessage (IncMasterN 1))    -- shift windows: more in master
+    , ("M-S-<Right>", sendMessage (IncMasterN (-1))) -- shift windows: fewer in master
 
     -- master window operations
     , ("M-<Delete>", windows W.focusMaster)
