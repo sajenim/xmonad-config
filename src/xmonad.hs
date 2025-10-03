@@ -1,7 +1,7 @@
 import Data.List as L
 import XMonad
 import XMonad.Actions.CycleWS
-import XMonad.Actions.Navigation2D
+import XMonad.Actions.CycleWindows
 import XMonad.Actions.RotSlaves
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -29,7 +29,6 @@ main = xmonad
      . docks
      . ewmhFullscreen
      . ewmh
-     . withNavigation2DConfig def
      . withSB myXmobar
      $ myConfig
 
@@ -85,30 +84,24 @@ myKeymap =
 
 
     --
-    -- Layout Navigation
+    -- Navigation
     --
 
-    -- directional navigation of windows
-    , ("M-<Up>"     , windowGo   U False)
-    , ("M-<Left>"   , windowGo   L False)
-    , ("M-<Down>"   , windowGo   D False)
-    , ("M-<Right>"  , windowGo   R False)
-
     -- cycle windows
-    , ("M-<Page_Up>"  , windows W.focusUp  )
-    , ("M-<Page_Down>", windows W.focusDown)
-
-    -- window rotation
-    , ("M-C-<Page_Up>",   rotAllUp)
-    , ("M-C-<Page_Down>", rotAllDown)
+    , ("M-<Up>"  , windows W.focusUp  )
+    , ("M-<Down>", windows W.focusDown)
 
     -- cycle workspaces
-    , ("M-<Home>", moveTo Prev hiddenWS)
-    , ("M-<End>" , moveTo Next hiddenWS)
+    , ("M-<Left>" , moveTo Prev hiddenWS)
+    , ("M-<Right>", moveTo Next hiddenWS)
 
-    -- focus screens (directional)
-    , ("M-C-<Home>", screenGo L False)  -- focus left monitor
-    , ("M-C-<End>",  screenGo R False)  -- focus right monitor
+    -- window rotation
+    , ("M-S-<Up>",   rotAllUp)
+    , ("M-S-<Down>", rotAllDown)
+
+    -- focus screens
+    , ("M-S-<Left>",  prevScreen)
+    , ("M-S-<Right>", nextScreen)
 
     -- switch workspaces
     , ("M-1", windows $ W.greedyView "code" )
@@ -125,14 +118,14 @@ myKeymap =
     , ("M-S-5", windows $ W.shift "misc" )
 
     -- master pane manipulation
-    , ("M-C-<Left>",  sendMessage Shrink)            -- control layout: shrink master
-    , ("M-C-<Right>", sendMessage Expand)            -- control layout: expand master
-    , ("M-S-<Left>",  sendMessage (IncMasterN 1))    -- shift windows: more in master
-    , ("M-S-<Right>", sendMessage (IncMasterN (-1))) -- shift windows: fewer in master
+    , ("M-<Home>",      sendMessage Shrink)            -- shrink master pane width
+    , ("M-<End>",       sendMessage Expand)            -- expand master pane width
+    , ("M-<Page_Up>",   sendMessage (IncMasterN 1))    -- more windows in master
+    , ("M-<Page_Down>", sendMessage (IncMasterN (-1))) -- fewer windows in master
 
     -- master window operations
-    , ("M-<Delete>", windows W.focusMaster)
-    , ("M-S-<Delete>", windows W.swapMaster)
+    , ("M-<Delete>",   windows W.focusMaster)
+    , ("M-S-<Delete>", windows W.swapMaster )
 
 
     --
