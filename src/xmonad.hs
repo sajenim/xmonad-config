@@ -6,12 +6,14 @@ import XMonad.Actions.RotSlaves
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.Modal
 import XMonad.Hooks.StatusBar
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.Spacing
 import XMonad.StackSet qualified as W
 import XMonad.Util.EZConfig
+import XMonad.Util.Font
 import XMonad.Util.Loggers
 
 import Graphics.X11.ExtraTypes.XF86
@@ -30,6 +32,7 @@ main = xmonad
      . ewmhFullscreen
      . ewmh
      . withSB myXmobar
+     . modal [layoutMode, spawnMode]
      $ myConfig
 
 myConfig = def
@@ -65,22 +68,17 @@ myScrot              = "scrot -s '%Y%m%d_%H%M%S.png' -e 'mv $f ~/Pictures/scrots
 
 myKeymap =
     --
-    -- LeaderKey
+    -- Core operations
     --
 
-    -- spawning programs
-    [ ("M-a n", spawn myTerminal   )
-    , ("M-a e", spawn myLauncher   )
-    , ("M-a t", spawn myFileManager)
-    , ("M-a s", spawn myScrot      )
-
-    -- toggling layouts
-    , ("M-a d", sendMessage $ JumpToLayout "dynamic tiling")
-    , ("M-a m", sendMessage $ JumpToLayout "maximised"     )
-    , ("M-a f", sendMessage $ JumpToLayout "fullscreen"    )
-
-    -- quit window
+    -- spawn/kill programs
+    [ ("M-a n", spawn myTerminal)
+    , ("M-a e", spawn myLauncher)
     , ("M-a q", kill)
+
+    -- modal modes
+    , ("M-a l", setMode "layout")
+    , ("M-a s", setMode "launch")
 
 
     --
@@ -96,12 +94,12 @@ myKeymap =
     , ("M-<Right>", moveTo Next hiddenWS)
 
     -- window rotation
-    , ("M-S-<Up>",   rotAllUp)
-    , ("M-S-<Down>", rotAllDown)
+    , ("M-<Page_Up>"  , rotAllUp)
+    , ("M-<Page_Down>", rotAllDown)
 
     -- focus screens
-    , ("M-S-<Left>",  prevScreen)
-    , ("M-S-<Right>", nextScreen)
+    , ("M-<Home>", prevScreen)
+    , ("M-<End>" , nextScreen)
 
     -- switch workspaces
     , ("M-1", windows $ W.greedyView "code" )
@@ -116,12 +114,6 @@ myKeymap =
     , ("M-S-3", windows $ W.shift "web"  )
     , ("M-S-4", windows $ W.shift "games")
     , ("M-S-5", windows $ W.shift "misc" )
-
-    -- master pane manipulation
-    , ("M-<Home>",      sendMessage Shrink)            -- shrink master pane width
-    , ("M-<End>",       sendMessage Expand)            -- expand master pane width
-    , ("M-<Page_Up>",   sendMessage (IncMasterN 1))    -- more windows in master
-    , ("M-<Page_Down>", sendMessage (IncMasterN (-1))) -- fewer windows in master
 
     -- master window operations
     , ("M-<Delete>",   windows W.focusMaster)
@@ -138,6 +130,30 @@ myKeymap =
     , ("<XF86AudioPrev>"       , spawn "mpc prev"  )
     , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%")
     , ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%")
+    ]
+
+
+--
+-- Modal Modes
+--
+
+layoutMode :: Mode
+layoutMode = mode "layout" $ mkKeysEz
+    -- jump to layout (exits immediately)
+    [ ("t", sendMessage (JumpToLayout "dynamic tiling") >> exitMode)
+    , ("m", sendMessage (JumpToLayout "maximised"     ) >> exitMode)
+    , ("f", sendMessage (JumpToLayout "fullscreen"    ) >> exitMode)
+    -- adjust master/slave split (stays in mode)
+    , ("<Left>",  sendMessage Shrink)
+    , ("<Right>", sendMessage Expand)
+    , ("<Up>",    sendMessage (IncMasterN 1))
+    , ("<Down>",  sendMessage (IncMasterN (-1)))
+    ]
+
+spawnMode :: Mode
+spawnMode = mode "launch" $ mkKeysEz
+    [ ("t", spawn myFileManager >> exitMode)
+    , ("s", spawn myScrot       >> exitMode)
     ]
 
 
@@ -175,8 +191,11 @@ myXmobarPP = def
     , ppHiddenNoWindows = grey0  . wrap " " ""
     , ppUrgent          = red    . wrap " " ""
     , ppLayout          = aqua   . wrap (grey0 " <fn=1>[</fn> ") (grey0 " <fn=1>]</fn> ")
-    , ppOrder           = \[ws, l, _] -> [ws, l]
+    , ppOrder           = \case { [ws, l, title, mode] -> [ws, l, mode, title]; xs -> xs }
+    , ppExtras          = [lMode]
     }
+  where
+    lMode = xmobarColorL "#d8a657" "#282828" . fixedWidthL AlignCenter "-" 6 $ logMode
 
 
 --

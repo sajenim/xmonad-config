@@ -90,12 +90,18 @@ main = xmonad
 
 **Key architectural components:**
 
-- **Navigation2D**: Directional window and screen navigation using arrow keys and Navigation2D module
-- **Custom keybindings**: Leader-key approach (`M-a` prefix) for spawning applications and layout switching
+- **Modal keybindings**: Uses `XMonad.Hooks.Modal` for organizing keybindings into modes (inspired by i3wm)
+  - Layout mode (`M-a l`): Unified mode for both layout operations
+    - `d/m/f` - Jump to layout (exits immediately)
+    - Arrow keys - Adjust master/slave split (stays in mode, `<Escape>` to exit)
+  - Spawn mode (`M-a s`): Launch infrequent applications (exits immediately)
+    - `t` - Thunar file manager
+    - `s` - Screenshot tool
+- **Leader-key approach**: `M-a` prefix for spawning applications and entering modes
 - **Window manipulation**: Uses `XMonad.Actions.RotSlaves` for window rotation (mimics wezterm behavior)
 - **Layout system**: Three layouts - dynamic tiling, maximised, and fullscreen
-- **StatusBar integration**: Communicates with xmobar via `_XMONAD_LOG_1` X property
-- **Mnemonic bindings**: Control (M-C) for layout manipulation, Shift (M-S) for window operations
+- **StatusBar integration**: Communicates with xmobar via `_XMONAD_LOG_1` X property, displays active mode via `logMode`
+- **Multimedia keys**: Uses `Graphics.X11.ExtraTypes.XF86` for XF86 multimedia key support (audio controls)
 
 ### XMobar Configuration (`src/xmobar.hs`)
 
