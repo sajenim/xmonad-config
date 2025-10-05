@@ -2,7 +2,6 @@ import Data.List as L
 import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.CycleWindows
-import XMonad.Actions.RotSlaves
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
@@ -94,9 +93,9 @@ myKeymap =
     , ("M-<Left>" , moveTo Prev hiddenWS)
     , ("M-<Right>", moveTo Next hiddenWS)
 
-    -- window rotation
-    , ("M-<Page_Up>"  , rotAllUp)
-    , ("M-<Page_Down>", rotAllDown)
+    -- move windows in stack
+    , ("M-<Page_Up>"  , windows W.swapUp  )
+    , ("M-<Page_Down>", windows W.swapDown)
 
     -- focus screens
     , ("M-<Home>", prevScreen)
