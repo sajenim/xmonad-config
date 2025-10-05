@@ -10,6 +10,7 @@ import XMonad.Hooks.Modal
 import XMonad.Hooks.StatusBar
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
+import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
 import XMonad.StackSet qualified as W
 import XMonad.Util.EZConfig
@@ -115,9 +116,17 @@ myKeymap =
     , ("M-S-4", windows $ W.shift "games")
     , ("M-S-5", windows $ W.shift "misc" )
 
+    -- resize window proportions
+    , ("M-S-<Up>"   , sendMessage MirrorExpand)
+    , ("M-S-<Down>" , sendMessage MirrorShrink)
+    , ("M-S-<Left>" , sendMessage Shrink)
+    , ("M-S-<Right>", sendMessage Expand)
+
     -- master window operations
-    , ("M-<Delete>",   windows W.focusMaster)
+    , ("M-<Delete>"  , windows W.focusMaster)
     , ("M-S-<Delete>", windows W.swapMaster )
+    , ("M-S-<Home>"  , sendMessage (IncMasterN 1))
+    , ("M-S-<End>"   , sendMessage (IncMasterN (-1)))
 
 
     --
@@ -143,15 +152,11 @@ layoutMode = mode "layout" $ mkKeysEz
     [ ("t", sendMessage (JumpToLayout "dynamic tiling") >> exitMode)
     , ("m", sendMessage (JumpToLayout "maximised"     ) >> exitMode)
     , ("f", sendMessage (JumpToLayout "fullscreen"    ) >> exitMode)
-    -- adjust master/slave split (stays in mode)
-    , ("<Left>",  sendMessage Shrink)
-    , ("<Right>", sendMessage Expand)
-    , ("<Up>",    sendMessage (IncMasterN 1))
-    , ("<Down>",  sendMessage (IncMasterN (-1)))
     ]
 
 spawnMode :: Mode
 spawnMode = mode "launch" $ mkKeysEz
+    -- spawn programs (exits immediately)
     [ ("t", spawn myFileManager >> exitMode)
     , ("s", spawn myScrot       >> exitMode)
     ]
@@ -164,7 +169,7 @@ spawnMode = mode "launch" $ mkKeysEz
 myLayouts = myTile ||| myMax ||| myFull
   where
     -- our layouts
-    myTile     = renamed [Replace "dynamic tiling"] . avoidStruts . myGaps $ Tall nmaster delta ratio
+    myTile     = renamed [Replace "dynamic tiling"] . avoidStruts . myGaps $ ResizableTall nmaster delta ratio []
     myMax      = renamed [Replace "maximised"     ] . avoidStruts . myGaps $ Full
     myFull     = renamed [Replace "fullscreen"    ] . noBorders            $ Full
     -- add a configurable amount of space around windows.
