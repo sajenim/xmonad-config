@@ -191,7 +191,7 @@ myXmobarPP = def
     { ppSep             = grey0         " "
     , ppCurrent         = blue   . wrap " " ""
     , ppTitle           = grey2  . wrap (grey0 " <fn=1>[</fn> ") (grey0 " <fn=1>]</fn>") . shorten 32
-    , ppVisible         = purple . wrap " " ""
+    , ppVisible         = grey0  . wrap " " ""
     , ppHidden          = grey0  . wrap " " ""
     , ppHiddenNoWindows = grey0  . wrap " " ""
     , ppUrgent          = red    . wrap " " ""
