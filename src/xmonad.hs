@@ -5,6 +5,7 @@ import XMonad.Actions.CycleWindows
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers (doRectFloat)
 import XMonad.Hooks.Modal
 import XMonad.Hooks.StatusBar
 import XMonad.Layout.NoBorders
@@ -210,7 +211,7 @@ myXmobarPP = def
 q ~? x = fmap (x `L.isInfixOf`) q
 
 myManageHook = composeAll
-    [ className =? "Thunar"     --> doFloat
+    [ className =? "Thunar"     --> doRectFloat (W.RationalRect 0.25 0.25 0.5 0.5)
     , className =? "Ristretto"  --> doFloat
     , className =? "Tk"         --> doFloat -- gui development (python)
     , className =? "TkFDialog"  --> doFloat -- ^^
