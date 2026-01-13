@@ -1,44 +1,117 @@
-# xmonad-config
+# XMonad Configuration
 
-Get a Haskell development environment up and running quickly. Thanks to Nix, this template is optimized for a fully reproducible and friendly development environment. It is based on:
+Personal XMonad window manager configuration with XMobar status bar, built as a Haskell project using Nix flakes.
 
-- [Nix](https://srid.ca/haskell-nix) + [Flakes](https://serokell.io/blog/practical-nix-flakes) (via [`github:srid/haskell-flake`](https://github.com/srid/haskell-flake)) + GHC 9.6
-- VSCode + [HLS](https://github.com/haskell/haskell-language-server)
-- [fourmolu](https://github.com/fourmolu/fourmolu) autoformatting
-- [Relude](https://github.com/kowainik/relude) as Prelude.
-  - `.hlint.yaml` is [from relude](https://github.com/kowainik/relude/blob/main/.hlint.yaml)
-- Devshell commands are provided via [just](https://just.systems/); run `just` in devshell.
+## Features
 
-If you have an *existing* Haskell project, you should probably use https://github.com/srid/haskell-flake instead.
+- **Modal Keybindings**: i3wm-inspired modal organization for layouts and application spawning
+- **Leader Key Approach**: `M-a` prefix for commands and mode entry
+- **Gruvbox Material Theme**: Consistent color scheme across XMonad and XMobar
+- **Multi-monitor Support**: XMobar positioned for dual-monitor setup
+- **Functional Architecture**: Compositional configuration using Relude as custom Prelude
 
-## Getting Started
+## Quick Start
 
-Initialize this template using:
+```bash
+# List available commands
+just
 
-```sh
-nix --accept-flake-config run github:juspay/omnix -- \
-  init github:srid/xmonad-config -o ./yourproject
+# Build the project
+just build
+
+# Enter development shell (or use direnv)
+nix develop
+
+# Access documentation (serves at http://127.0.0.1:8888)
+just docs
 ```
 
-*tldr: [Install Nix](https://nixos.asia/en/install), [setup direnv](https://nixos.asia/en/direnv), open in VSCode, install recommended extensions and run `just run`.*
+## Project Structure
 
-Full instructions: https://srid.ca/xmonad-config/start
+```
+src/
+├── xmonad.hs                        # Window manager configuration
+├── xmobar.hs                        # Status bar configuration
+└── XMonadConfig/
+    └── GruvboxMaterial.hs          # Shared color scheme module
+```
 
-Recommended dev environment setup: https://nixos.asia/en/direnv
+Two executables are built:
+- **xmonad** - Window manager
+- **xmobar** - Status bar
 
-## Tips
+Both share the `XMonadConfig.GruvboxMaterial` module for consistent theming.
 
-- Run `nix flake update` to update all flake inputs.
-- Run `nix --accept-flake-config run github:juspay/omnix ci` to build _all_ outputs.
-- [pre-commit] hooks will automatically be setup in Nix shell. You can also run `pre-commit run -a` manually to run the hooks (e.g.: to autoformat the project tree using fourmolu, nixpkgs-fmt, etc. as well run programs like hlint). The hooks will checked as part of flake checks (thus CI).
-- Run `just docs` to start Hoogle with packages in your cabal file.
-- Run the application without installing: `nix run github:srid/xmonad-config` (or `nix run .` from checkout)
-- Common workflows
-  - Adding library dependencies in Nix: https://community.flake.parts/haskell-flake/dependency
-  - Adding tests: https://srid.ca/xmonad-config/tests
+## Key Bindings
 
-## Discussions
+### Modal Keybindings
 
-Questions? Ideas? Suggestions? Join our [NixOS Zulip](https://nixos.zulipchat.com/#narrow/stream/413949-haskell-flake) or post in [Github Discussions](https://github.com/srid/xmonad-config/discussions).
+- **Layout Mode** (`M-a l`):
+  - `d/m/f` - Jump to layout (exits immediately)
+  - Arrow keys - Adjust master/slave split (stays in mode, `<Escape>` to exit)
 
-[pre-commit]: https://github.com/cachix/git-hooks.nix
+- **Spawn Mode** (`M-a s`):
+  - `t` - Thunar file manager
+  - `s` - Screenshot tool
+
+### Window Management
+
+- Window rotation using `XMonad.Actions.RotSlaves` (mimics wezterm behavior)
+- Three layouts: dynamic tiling, maximised, fullscreen
+
+## Development
+
+### Build System
+
+Uses **just** for task running and **Nix flakes** for reproducible builds:
+
+```bash
+# Update flake inputs
+nix flake update
+
+# Build all outputs
+nix --accept-flake-config run github:juspay/omnix ci
+
+# Start REPL
+just repl
+```
+
+### Pre-commit Hooks
+
+Automatically configured in the Nix shell:
+- **fourmolu** - Haskell formatting
+- **nixpkgs-fmt** - Nix formatting
+- **hlint** - Haskell linting
+
+Run manually: `pre-commit run -a`
+
+### Haskell Configuration
+
+- **Custom Prelude**: Uses Relude instead of standard Prelude
+- **Strict compilation**: Extensive warnings enabled (`-Wall`, incomplete pattern warnings, etc.)
+- **Default Extensions**: DataKinds, DerivingStrategies, LambdaCase, OverloadedStrings, and more
+- **Static Analysis**: Stan enabled for the xmonad-config package
+
+## Dependencies
+
+- **xmonad**, **xmonad-contrib** - Core window manager libraries
+- **xmobar** - Status bar library
+- **relude** - Alternative Prelude
+- **optics-core** - Lens-style accessors
+- **data-default** - Default instances for configuration
+
+## Architecture
+
+The configuration is built compositionally using function application:
+
+```haskell
+main = xmonad
+     . docks
+     . ewmhFullscreen
+     . ewmh
+     . withNavigation2DConfig def
+     . withSB myXmobar
+     $ myConfig
+```
+
+StatusBar integration communicates via `_XMONAD_LOG_1` X property, displaying active modes and workspace information.
