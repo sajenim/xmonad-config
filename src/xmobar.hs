@@ -47,10 +47,12 @@ config =
           ["-r", "-s"]
           ""
           (0 `seconds`)
-    , --  Date Format Alias RefreshRate
+    , --  DateZone Format Locale Zone Alias RefreshRate
       Run $
-        Date
+        DateZone
           (grey2 "%A %B %d %Y " ++ yellow "%H:%M:%S")
+          ""
+          "America/Los_Angeles"
           "date"
           (1 `seconds`)
     , -- Weather StationID Args RefreshRate
