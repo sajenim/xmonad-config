@@ -52,7 +52,7 @@ config =
         DateZone
           (grey2 "%A %B %d %Y " ++ yellow "%H:%M:%S")
           ""
-          "America/Los_Angeles"
+          "Australia/Perth"
           "date"
           (1 `seconds`)
     , -- Weather StationID Args RefreshRate
@@ -69,7 +69,7 @@ config =
       Run $
         DiskU
           [ ("/", inWrapper' (ppTitle "System" ++ ppDiskSpace))
-          , ("/home/sajenim", inWrapper' (ppTitle "Home" ++ ppDiskSpace))
+          , ("/home/sajenim/.local/share/Steam", inWrapper' (ppTitle "Games" ++ ppDiskSpace))
           ]
           []
           (30 `minutes`)
