@@ -79,7 +79,7 @@ myKeymap =
 
     -- modal modes
     , ("M-a l", setMode "layout")
-    , ("M-a s", setMode "launch")
+    , ("M-a s", setMode "spawn")
 
 
     --
@@ -95,8 +95,8 @@ myKeymap =
     , ("M-<Right>", moveTo Next hiddenWS)
 
     -- move windows in stack
-    , ("M-<Page_Up>"  , windows W.swapUp  )
-    , ("M-<Page_Down>", windows W.swapDown)
+    , ("M-S-<Page_Up>"  , windows W.swapUp  )
+    , ("M-S-<Page_Down>", windows W.swapDown)
 
     -- focus screens
     , ("M-<Home>", prevScreen)
@@ -155,7 +155,7 @@ layoutMode = mode "layout" $ mkKeysEz
     ]
 
 spawnMode :: Mode
-spawnMode = mode "launch" $ mkKeysEz
+spawnMode = mode "spawn" $ mkKeysEz
     -- spawn programs (exits immediately)
     [ ("t", spawn myFileManager >> exitMode)
     , ("s", spawn myScrot       >> exitMode)
