@@ -75,7 +75,8 @@ myKeymap =
     -- spawn/kill programs
     [ ("M-a n", spawn myTerminal)
     , ("M-a e", spawn myLauncher)
-    , ("M-a q", kill)
+    , ("M-a q", kill            )
+    , ("M-S-q", io exitSuccess  )
 
     -- modal modes
     , ("M-a l", setMode "layout")
