@@ -57,7 +57,7 @@ myModMask            = mod4Mask
 myBorderWidth        = 5
 myNormalBorderColor  = "#32302f"
 myFocusedBorderColor = "#32302f"
-myWorkspaces         = ["code", "chat", "web", "games", "misc"]
+myWorkspaces         = ["root", "aux", "www", "game", "void"]
 myLauncher           = "dmenu_run -fn 'Fisa Code-10'"
 myFileManager        = "thunar"
 myScrot              = "scrot -s '%Y%m%d_%H%M%S.png' -e 'mv $f ~/Pictures/scrots/'"
@@ -104,18 +104,18 @@ myKeymap =
     , ("M-<End>" , nextScreen)
 
     -- switch workspaces
-    , ("M-1", windows $ W.greedyView "code" )
-    , ("M-2", windows $ W.greedyView "chat" )
-    , ("M-3", windows $ W.greedyView "web"  )
-    , ("M-4", windows $ W.greedyView "games")
-    , ("M-5", windows $ W.greedyView "misc" )
+    , ("M-1", windows $ W.greedyView "root")
+    , ("M-2", windows $ W.greedyView "aux" )
+    , ("M-3", windows $ W.greedyView "www" )
+    , ("M-4", windows $ W.greedyView "game")
+    , ("M-5", windows $ W.greedyView "void")
 
     -- send window to workspace
-    , ("M-S-1", windows $ W.shift "code" )
-    , ("M-S-2", windows $ W.shift "chat" )
-    , ("M-S-3", windows $ W.shift "web"  )
-    , ("M-S-4", windows $ W.shift "games")
-    , ("M-S-5", windows $ W.shift "misc" )
+    , ("M-S-1", windows $ W.shift "root")
+    , ("M-S-2", windows $ W.shift "aux" )
+    , ("M-S-3", windows $ W.shift "www" )
+    , ("M-S-4", windows $ W.shift "game")
+    , ("M-S-5", windows $ W.shift "void")
 
     -- resize window proportions
     , ("M-S-<Up>"   , sendMessage MirrorExpand)
