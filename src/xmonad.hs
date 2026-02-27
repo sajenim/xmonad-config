@@ -72,16 +72,15 @@ myKeymap =
     -- Core operations
     --
 
+    -- activate modal modes
+    [ ("M-a n", setMode "terminal")
+    , ("M-a l", setMode "layout"  )
+    , ("M-a s", setMode "spawn"   )
+
     -- spawn/kill programs
-    [ ("M-a n", spawn myTerminal)
     , ("M-a e", spawn myLauncher)
     , ("M-a q", kill            )
     , ("M-S-q", io exitSuccess  )
-
-    -- modal modes
-    , ("M-a l", setMode "layout")
-    , ("M-a s", setMode "spawn")
-
 
     --
     -- Navigation
@@ -146,6 +145,16 @@ myKeymap =
 --
 -- Modal Modes
 --
+
+termMode :: Mode
+termMode = mode "terminal" $ mkKeysEz
+    -- spawn terminals (exits immediately)
+    [ ("d", spawn "wezterm cli spawn --workspace default"   >> exitMode)
+    , ("s", spawn "wezterm cli spawn --workspace sysadmin"  >> exitMode)
+    , ("c", spawn "wezterm cli spawn --workspace chat"      >> exitMode)
+    , ("m", spawn "wezterm cli spawn --workspace media"     >> exitMode)
+    , ("a", spawn "wezterm cli spawn --workspace academics" >> exitMode)
+    ]
 
 layoutMode :: Mode
 layoutMode = mode "layout" $ mkKeysEz
