@@ -33,7 +33,7 @@ main = xmonad
      . ewmhFullscreen
      . ewmh
      . withSB myXmobar
-     . modal [layoutMode, spawnMode]
+     . modal [termMode, layoutMode, spawnMode]
      $ myConfig
 
 myConfig = def
