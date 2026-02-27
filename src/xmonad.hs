@@ -149,11 +149,11 @@ myKeymap =
 termMode :: Mode
 termMode = mode "terminal" $ mkKeysEz
     -- spawn terminals (exits immediately)
-    [ ("d", spawn "wezterm cli spawn --workspace default"   >> exitMode)
-    , ("s", spawn "wezterm cli spawn --workspace sysadmin"  >> exitMode)
-    , ("c", spawn "wezterm cli spawn --workspace chat"      >> exitMode)
-    , ("m", spawn "wezterm cli spawn --workspace media"     >> exitMode)
-    , ("a", spawn "wezterm cli spawn --workspace academics" >> exitMode)
+    [ ("d", spawn "wezterm start --workspace default"   >> exitMode)
+    , ("s", spawn "wezterm start --workspace sysadmin"  >> exitMode)
+    , ("c", spawn "wezterm start --workspace chat"      >> exitMode)
+    , ("m", spawn "wezterm start --workspace media"     >> exitMode)
+    , ("a", spawn "wezterm start --workspace academics" >> exitMode)
     ]
 
 layoutMode :: Mode
