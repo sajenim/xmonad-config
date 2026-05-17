@@ -225,7 +225,7 @@ myXmobarPP = def
 --
 myStartupHook :: X ()
 myStartupHook = do
-    spawnOnce "gentoo-pipewire-launcher"
+    spawn "gentoo-pipewire-launcher"
     spawnOnce "feh-wallpaper"
 
 --
