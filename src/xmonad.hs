@@ -34,7 +34,7 @@ main = xmonad
      . ewmhFullscreen
      . ewmh
      . withSB myXmobar
-     . modal [termMode, layoutMode, spawnMode]
+     . modal [layoutMode, spawnMode]
      $ myConfig
 
 myConfig = def
@@ -77,11 +77,11 @@ myKeymap =
     --
 
     -- activate modal modes
-    [ ("M-a n", setMode "terminal")
-    , ("M-a l", setMode "layout"  )
+    [ ("M-a l", setMode "layout"  )
     , ("M-a s", setMode "spawn"   )
 
     -- spawn/kill programs
+    , ("M-a n", spawn myTerminal)
     , ("M-a e", spawn myLauncher)
     , ("M-a q", kill            )
     , ("M-S-q", io exitSuccess  )
@@ -149,17 +149,6 @@ myKeymap =
 --
 -- Modal Modes
 --
-
-termMode :: Mode
-termMode = mode "terminal" $ mkKeysEz
-    -- spawn terminals (exits immediately)
-    [ ("d", spawn "wezterm connect unix --workspace default"   >> exitMode)
-    , ("e", spawn "wezterm connect unix --workspace email"     >> exitMode)
-    , ("s", spawn "wezterm connect unix --workspace sysadmin"  >> exitMode)
-    , ("c", spawn "wezterm connect unix --workspace chat"      >> exitMode)
-    , ("m", spawn "wezterm connect unix --workspace media"     >> exitMode)
-    , ("a", spawn "wezterm connect unix --workspace academics" >> exitMode)
-    ]
 
 layoutMode :: Mode
 layoutMode = mode "layout" $ mkKeysEz
